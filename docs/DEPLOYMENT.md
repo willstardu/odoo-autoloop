@@ -1,4 +1,4 @@
-# Odoo 19 自动编程 + 自动测试流水线 部署文档
+﻿# Odoo 19 自动编程 + 自动测试流水线 部署文档
 
 > 编码用 GLM-5.2（云端 API），测试用 Playwright（确定性 E2E），失败诊断用本地 Qwen2.5VL（Ollama）。
 > GLM 修复在 Git worktree 中隔离进行，测试通过后合并回主分支。
@@ -58,9 +58,101 @@
 
 ---
 
-## 3. 部署步骤（全新机器）
+## 3. 创建 GitHub 仓库与首次推送
 
-### 3.1 安装依赖
+> 项目代码托管在 https://github.com/willstardu/odoo-autoloop
+> 以下是从零创建仓库并推送的完整流程（首次部署时执行一次即可）。
+
+### 3.1 在 GitHub 网页创建空仓库
+
+1. 打开 https://github.com/new
+2. 填写：
+   | 字段 | 值 |
+   |---|---|
+   | Owner | `willstardu` |
+   | Repository name | `odoo-autoloop` |
+   | Description | 可选（如 Odoo 19 自动编程+测试流水线） |
+   | Visibility | Public 或 Private（推荐 Private） |
+   | Add README | **Off** |
+   | Add .gitignore | **Off** |
+   | Add license | **Off** |
+3. 点击 **Create repository**
+
+> 三个 "Add" 开关必须保持 **Off**。因为本地仓库已包含 README/.gitignore 等文件，
+> 若 GitHub 再生成一份，首次推送会产生冲突（可解决但麻烦）。
+
+### 3.2 生成 Personal Access Token
+
+推送需要 GitHub 认证。推荐细粒度（fine-grained）token：
+
+1. 打开 https://github.com/settings/personal-access-tokens
+2. 点 **Generate new token**
+3. 配置：
+   | 项 | 值 |
+   |---|---|
+   | Resource owner | `willstardu` |
+   | Expiration | 90 days 或自定义 |
+   | Repository access | **Only select repositories** → 勾选 `odoo-autoloop` |
+   | Permissions → Contents | **Read and write** |
+   | Permissions → Metadata | Read（自动带上） |
+   | Permissions → **Workflows** | **Read and write**（必须） |
+4. 点 **Generate token**，复制 `github_pat_` 开头的完整 token
+
+> 仓库含 `.github/workflows/autotest.yml`，**必须**给 Workflows 配 Read and write，
+> 否则推送会被拒绝：`refusing to allow a Personal Access Token to create or update workflow`。
+>
+> 备选：classic token（https://github.com/settings/tokens），勾选 `repo` + `workflow`。
+
+### 3.3 配置 git 凭据并推送
+
+```powershell
+cd C:\Users\willstar\Documents\odoo-autoloop
+
+# 配置凭据管理器（首次）
+git config --global credential.helper manager
+
+# 写入凭据（token 存到 Windows 凭据管理器，不进任何文件）
+"protocol=https`nhost=github.com`nusername=willstardu`npassword=你的TOKEN`n" | git credential approve
+
+# 添加远程并推送
+git remote add origin https://github.com/willstardu/odoo-autoloop.git
+git push -u origin main
+```
+
+推送成功标志：
+```
+branch 'main' set up to track 'origin/main'.
+```
+
+### 3.4 提交代码到远程（日常开发）
+
+```powershell
+cd C:\Users\willstar\Documents\odoo-autoloop
+
+# 查看改动
+git status
+git diff
+
+# 提交（先确保 .env / artifacts / workspace 未被跟踪）
+git add .
+git commit -m "描述你的改动"
+
+# 推送
+git push
+```
+
+### 3.5 安全建议
+
+- 推送完成后可在 https://github.com/settings/personal-access-tokens 撤销 token
+- token 只授权 `odoo-autoloop` 仓库，降低泄露风险
+- 重新部署机器时，重新生成 token 并执行 3.3 的凭据写入即可
+- 若 GitHub 访问不稳定（国内网络），重试 `git push` 或配置代理
+
+---
+
+## 4. 部署步骤（全新机器）
+
+### 4.1 安装依赖
 
 ```powershell
 # Python 3.12（https://www.python.org/downloads/，勾选 Add to PATH）
@@ -75,7 +167,7 @@ python -m venv .venv
 .venv\Scripts\playwright install chromium
 ```
 
-### 3.2 配置 `.env`
+### 4.2 配置 `.env`
 
 ```powershell
 Copy-Item .env.example .env
@@ -90,7 +182,7 @@ ODOO_PASSWORD=odoo123456        # Odoo admin 密码
 
 其余按默认即可（默认值已指向正确环境）。
 
-### 3.3 同步模块源码并建 Git 基线
+### 4.3 同步模块源码并建 Git 基线
 
 ```powershell
 # 从 Ubuntu 拉取 baselife_stock 模块（首次）
@@ -103,7 +195,7 @@ git -C workspace\baselife_stock add -A
 git -C workspace\baselife_stock commit -m "baselife_stock baseline"
 ```
 
-### 3.4 验证模型链路
+### 4.4 验证模型链路
 
 ```powershell
 # 验证 Qwen
@@ -113,7 +205,7 @@ git -C workspace\baselife_stock commit -m "baselife_stock baseline"
 $env:TOKENHUB_GLM_API_KEY="你的key"; .venv\Scripts\python.exe -c "from openai import OpenAI; import os; c=OpenAI(base_url='https://api.tokenhub.market/v1', api_key=os.environ['TOKENHUB_GLM_API_KEY']); print(c.chat.completions.create(model='glm-5.2', messages=[{'role':'user','content':'hi'}], max_tokens=10).choices[0].message.content)"
 ```
 
-### 3.5 运行
+### 4.5 运行
 
 ```powershell
 .venv\Scripts\python.exe run.py
@@ -123,7 +215,7 @@ $env:TOKENHUB_GLM_API_KEY="你的key"; .venv\Scripts\python.exe -c "from openai 
 
 ---
 
-## 4. 流水线工作原理
+## 5. 流水线工作原理
 
 ```
 Round 1:
@@ -147,7 +239,7 @@ Round 2..N: 重测；通过则 merge worktree → main
 
 ---
 
-## 5. 定时任务（自动回归）
+## 6. 定时任务（自动回归）
 
 ```powershell
 # 管理员 PowerShell
@@ -162,7 +254,7 @@ powershell -ExecutionPolicy Bypass -File schedule_task.ps1 -Uninstall
 
 ---
 
-## 6. CI（GitHub Actions + 自托管 Runner）
+## 7. CI（GitHub Actions + 自托管 Runner）
 
 Odoo/Qwen 在局域网内，GitHub 云端 runner 无法访问，因此需自托管 runner：
 
@@ -198,7 +290,7 @@ Odoo/Qwen 在局域网内，GitHub 云端 runner 无法访问，因此需自托�
 
 ---
 
-## 7. 常见问题
+## 8. 常见问题
 
 | 现象 | 排查 |
 |---|---|
@@ -208,11 +300,13 @@ Odoo/Qwen 在局域网内，GitHub 云端 runner 无法访问，因此需自托�
 | GLM 无修改 | 诊断 confidence 低或根因不在代码，查看 `final_report.json` |
 | push 失败 | Ubuntu SSH 凭据（`src/utils/sftp_tool.py` 顶部） |
 | 中文乱码 | 已自动 `reconfigure utf-8`；PowerShell 控制台用 `chcp 65001` |
+| GitHub 推送失败 | 网络波动重试；或检查 token 是否有 `workflow` 权限 |
 
 ---
 
-## 8. 安全说明
+## 9. 安全说明
 
 - `.env` 含密钥，已在 `.gitignore`，**永不提交**
 - Odoo 密码 / GLM Key 通过环境变量或 Secrets 注入
 - 测试账号建议使用独立测试库专用账号，勿在生产库跑 E2E
+- GitHub token 建议只授权本项目仓库，推送完成后可撤销
