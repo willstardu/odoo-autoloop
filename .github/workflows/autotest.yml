@@ -1,0 +1,80 @@
+name: Odoo19 AutoTest Loop (LAN)
+
+# 触发方式：
+#  1. push 到 main
+#  2. 手动触发（workflow_dispatch）
+#  3. 定时（schedule）
+# 注意：本 workflow 的 test/diagnose/fix 步骤需要局域网资源
+#       （Odoo 192.168.108.134:8069、Ollama 192.168.108.143:11434），
+#       因此必须运行在自托管 runner（部署在 192.168.108.99 本机）上。
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 2 * * *"   # 每天 02:00 UTC (10:00 北京时间)
+  workflow_dispatch:
+
+jobs:
+  autotest:
+    runs-on: [self-hosted, windows, odoo-lan]
+    defaults:
+      run:
+        shell: powershell
+    env:
+      PYTHONIOENCODING: utf-8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup venv
+        run: |
+          if (-not (Test-Path ".venv")) {
+            python -m venv .venv
+            .\.venv\Scripts\pip.exe install -q -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+            .\.venv\Scripts\playwright.exe install chromium
+          }
+
+      - name: Write .env from secrets
+        run: |
+          @"
+          GLM_BASE_URL=${{ vars.GLM_BASE_URL }}
+          GLM_API_KEY=${{ secrets.GLM_API_KEY }}
+          GLM_MODEL=${{ vars.GLM_MODEL }}
+          QWEN_BASE_URL=${{ vars.QWEN_BASE_URL }}
+          QWEN_API_KEY=${{ vars.QWEN_API_KEY }}
+          QWEN_MODEL=${{ vars.QWEN_MODEL }}
+          ODOO_URL=${{ vars.ODOO_URL }}
+          ODOO_DB=${{ vars.ODOO_DB }}
+          ODOO_USER=${{ vars.ODOO_USER }}
+          ODOO_PASSWORD=${{ secrets.ODOO_PASSWORD }}
+          MAX_RETRIES=${{ vars.MAX_RETRIES }}
+          HEADLESS=true
+          "@ | Set-Content .env -Encoding UTF8
+
+      - name: Pull module from Ubuntu
+        run: |
+          $env:PYTHONPATH = "$PWD"
+          .\.venv\Scripts\python.exe src\utils\sftp_tool.py pull
+
+      - name: Run auto coder + test loop
+        id: loop
+        run: |
+          $env:PYTHONPATH = "$PWD"
+          .\.venv\Scripts\python.exe run.py
+        continue-on-error: true
+
+      - name: Upload artifacts (screenshots & report)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: autotest-artifacts-${{ github.run_id }}
+          path: |
+            artifacts/
+            workspace/
+          retention-days: 14
+
+      - name: Fail if tests failed
+        if: steps.loop.outcome == 'failure'
+        run: |
+          Write-Host "::error::Auto test loop FAILED. See artifacts."
+          exit 1

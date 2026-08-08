@@ -1,0 +1,7 @@
+# 编排与 LLM API
+openai>=1.50.0
+python-dotenv>=1.0.1
+paramiko>=3.4.0
+
+# 自动化测试
+playwright>=1.48.0

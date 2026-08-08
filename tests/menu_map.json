@@ -1,0 +1,230 @@
+[
+  {
+    "id": 323,
+    "name": "OmniPod",
+    "children": [
+      324,
+      328,
+      332,
+      336
+    ],
+    "appID": 323,
+    "xmlid": "baselife_stock.menu_baselife_stock_root",
+    "actionID": 531,
+    "actionModel": "ir.actions.act_window",
+    "actionPath": false,
+    "webIcon": "baselife_stock,static/description/icon.png",
+    "webIconData": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAADgklEQVR42u2dMW4VMRRFbfNTUVCkp6BCrIA+EhKsIIpSsgCWQkNHGaGsAKJI6bMCRBVF9L9IQYXAFOgDBdKf8Xji9949t0ozkz++x/fZM2NPrrUmpKtCEwAAAgCkqk2n8zCQGKc8CgBMt6G6BIYNxoeEIa81BsB8f6nQJQEwPmgaFMzXToONQgu8P/nUdNzrDy/jTyH23AquCkaLgJHnAlAxPRwMOQQAo013DMNkACrGhwUhuwLAi+mOYPABgHfjDYOQ990HwPzY11T3JUClkcKnQTb3PoCK+daudXgCKBlvKA1sJIC6+RbaoGC+NgT3XgIw3kRJGFMCMN9eGxXM14agYL42BAXztSEomK8NASuDEkvD6P3CKVAwXxuCgvnaEDAGYAxA71dOgYL52hBQAigB9H7lFCiYrw0BJYASQO9XTgESgARAAED8y5YBEoAEoPcrpwAJQAIgZc1eGBIp/p9/f9V87OM3j/78/fXtXfN5rg8+pgELS/LQbeKOj04XHX9+dUbXTbZ2C5+tn09/tNWsLw+6/5bDZ08ajtouOn77+cbfGIDRf7zZAINAZgEIABAAIABATAPveVFC45Ru6X2EnW4v4s4Epu40MiwB1pjPI0c3glJqvxnUTRcAwBgAABAAIMYAivr7SHe76DwPX2wbjvn9v6/fkQAIABAlYIB2b/K0PM//N/a/XR6m5vcBDkgABAAIABAAIMMAKHxIOQl+c4AEIAEQACAAQACAAICZgNpXx4Y8Czi/OkvHR6dm3gtsWae3e5xraZ2fqxLACt/k99vBLBJ1H/+ZQSACANQIALOBON8cJgFIANNfuUYre0ECkAAIACgDkvFPAqDlAJACfnt/twQAAp/mUwJQPwBIAX+9v3sCAIEv8ykBqD8ApICf3r9aAgCBnzYt3n4w5vMsAHkBgBSw34bF+wVgvoMSAAR226xEuyDMNzwIBAJ7bdS0MCQN/uI1xi/3ffg0kDSw0RZF9cIxf3AJUC8Jg423tzZQKQ0sXauZBFBIA0PG214dHDENrF7T/xLARApESQODxmdXAHiEwXiC+QXAOghOStckAMxDYAUGZ+OVPHUM4AaAETA4HqTOAsAlBD3BCDYbyXNmAeEgEFdOvBOIWgHINFPM3p/S9K1iM+UglvGtJYA0CGR+62bRpEEA43vsFp6ZKfg0fY3t4ikNrAxCAIDc6RfV8FYPUuvhYgAAAABJRU5ErkJggg==",
+    "webIconDataMimetype": "image/png"
+  },
+  {
+    "id": 324,
+    "name": "晶圆库",
+    "children": [
+      325,
+      326,
+      327
+    ],
+    "appID": 323,
+    "xmlid": "baselife_stock.menu_wafer",
+    "actionID": false,
+    "actionModel": false,
+    "actionPath": false,
+    "webIcon": false,
+    "webIconData": false,
+    "webIconDataMimetype": false
+  },
+  {
+    "id": 325,
+    "name": "库存",
+    "children": [],
+    "appID": 323,
+    "xmlid": "baselife_stock.menu_wafer_quant",
+    "actionID": 531,
+    "actionModel": "ir.actions.act_window",
+    "actionPath": false,
+    "webIcon": false,
+    "webIconData": false,
+    "webIconDataMimetype": false
+  },
+  {
+    "id": 326,
+    "name": "出入库",
+    "children": [],
+    "appID": 323,
+    "xmlid": "baselife_stock.menu_wafer_picking",
+    "actionID": 534,
+    "actionModel": "ir.actions.act_window",
+    "actionPath": false,
+    "webIcon": false,
+    "webIconData": false,
+    "webIconDataMimetype": false
+  },
+  {
+    "id": 327,
+    "name": "批次/序列号",
+    "children": [],
+    "appID": 323,
+    "xmlid": "baselife_stock.menu_wafer_lot",
+    "actionID": 537,
+    "actionModel": "ir.actions.act_window",
+    "actionPath": false,
+    "webIcon": false,
+    "webIconData": false,
+    "webIconDataMimetype": false
+  },
+  {
+    "id": 328,
+    "name": "IT 库",
+    "children": [
+      329,
+      330,
+      331
+    ],
+    "appID": 323,
+    "xmlid": "baselife_stock.menu_it",
+    "actionID": false,
+    "actionModel": false,
+    "actionPath": false,
+    "webIcon": false,
+    "webIconData": false,
+    "webIconDataMimetype": false
+  },
+  {
+    "id": 329,
+    "name": "库存",
+    "children": [],
+    "appID": 323,
+    "xmlid": "baselife_stock.menu_it_quant",
+    "actionID": 532,
+    "actionModel": "ir.actions.act_window",
+    "actionPath": false,
+    "webIcon": false,
+    "webIconData": false,
+    "webIconDataMimetype": false
+  },
+  {
+    "id": 330,
+    "name": "出入库",
+    "children": [],
+    "appID": 323,
+    "xmlid": "baselife_stock.menu_it_picking",
+    "actionID": 535,
+    "actionModel": "ir.actions.act_window",
+    "actionPath": false,
+    "webIcon": false,
+    "webIconData": false,
+    "webIconDataMimetype": false
+  },
+  {
+    "id": 331,
+    "name": "IT 资产",
+    "children": [],
+    "appID": 323,
+    "xmlid": "baselife_stock.menu_it_asset",
+    "actionID": 530,
+    "actionModel": "ir.actions.act_window",
+    "actionPath": false,
+    "webIcon": false,
+    "webIconData": false,
+    "webIconDataMimetype": false
+  },
+  {
+    "id": 332,
+    "name": "研发材料库",
+    "children": [
+      333,
+      334,
+      335
+    ],
+    "appID": 323,
+    "xmlid": "baselife_stock.menu_rd",
+    "actionID": false,
+    "actionModel": false,
+    "actionPath": false,
+    "webIcon": false,
+    "webIconData": false,
+    "webIconDataMimetype": false
+  },
+  {
+    "id": 333,
+    "name": "库存",
+    "children": [],
+    "appID": 323,
+    "xmlid": "baselife_stock.menu_rd_quant",
+    "actionID": 533,
+    "actionModel": "ir.actions.act_window",
+    "actionPath": false,
+    "webIcon": false,
+    "webIconData": false,
+    "webIconDataMimetype": false
+  },
+  {
+    "id": 334,
+    "name": "出入库",
+    "children": [],
+    "appID": 323,
+    "xmlid": "baselife_stock.menu_rd_picking",
+    "actionID": 536,
+    "actionModel": "ir.actions.act_window",
+    "actionPath": false,
+    "webIcon": false,
+    "webIconData": false,
+    "webIconDataMimetype": false
+  },
+  {
+    "id": 335,
+    "name": "领料申请单",
+    "children": [],
+    "appID": 323,
+    "xmlid": "baselife_stock.menu_rd_requisition",
+    "actionID": 529,
+    "actionModel": "ir.actions.act_window",
+    "actionPath": false,
+    "webIcon": false,
+    "webIconData": false,
+    "webIconDataMimetype": false
+  },
+  {
+    "id": 336,
+    "name": "主数据",
+    "children": [
+      337,
+      338
+    ],
+    "appID": 323,
+    "xmlid": "baselife_stock.menu_master",
+    "actionID": false,
+    "actionModel": false,
+    "actionPath": false,
+    "webIcon": false,
+    "webIconData": false,
+    "webIconDataMimetype": false
+  },
+  {
+    "id": 337,
+    "name": "商品",
+    "children": [],
+    "appID": 323,
+    "xmlid": "baselife_stock.menu_master_product",
+    "actionID": 538,
+    "actionModel": "ir.actions.act_window",
+    "actionPath": false,
+    "webIcon": false,
+    "webIconData": false,
+    "webIconDataMimetype": false
+  },
+  {
+    "id": 338,
+    "name": "库位",
+    "children": [],
+    "appID": 323,
+    "xmlid": "baselife_stock.menu_master_location",
+    "actionID": 539,
+    "actionModel": "ir.actions.act_window",
+    "actionPath": false,
+    "webIcon": false,
+    "webIconData": false,
+    "webIconDataMimetype": false
+  }
+]
